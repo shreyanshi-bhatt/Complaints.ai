@@ -1,7 +1,11 @@
 import streamlit as st
-from langchain_community.llms import CTransformers
+from sentence_transformers import SentenceTransformer, util
 from collections import defaultdict
 import pandas as pd
+
+# Load the model for embeddings
+def load_embedding_model():
+    return SentenceTransformer('paraphrase-MiniLM-L6-v2')  # A smaller, faster model
 
 # Define complaint categories
 complaint_categories = [
@@ -17,39 +21,17 @@ complaint_categories = [
     'Subscription Services'
 ]
 
-
-# Create a prompt for classification
-def create_prompt(text):
-    categories = ', '.join(complaint_categories)
-    prompt = f"Classify the following complaint into one of these categories: {categories}\n\nComplaint Text: {text}\n\nCategory:"
-    return prompt
-
-
-# Classify the complaint using the model
-def classify_complaint(text, model):
-    prompt = create_prompt(text)
-    result = model(prompt)
-    return result.strip()
-
-
-# Load the model once and store in session state
-def load_llm():
-    return CTransformers(
-        model="TheBloke/Llama-2-7B-Chat-GGML",
-        model_type="llama",
-        max_new_tokens=512,
-        temperature=0.5
-    )
-
-
 # Streamlit app
 st.title("Complaint Classification App")
 
-# Load the model once and store it in session state
-if 'model' not in st.session_state:
-    st.session_state.model = load_llm()
+# Load the embedding model once and store it in session state
+if 'embedding_model' not in st.session_state:
+    st.session_state.embedding_model = load_embedding_model()
 
-model = st.session_state.model
+embedding_model = st.session_state.embedding_model
+
+# Precompute category embeddings
+category_embeddings = embedding_model.encode(complaint_categories)
 
 uploaded_file = st.file_uploader("Upload a complaints.txt file", type="txt")
 
@@ -61,21 +43,22 @@ if st.button("Analyze"):
         category_counts = defaultdict(int)
 
         for complaint in complaints:
-            category = classify_complaint(complaint, model)
-            if category in complaint_categories:
-                category_counts[category] += 1
+            complaint_embedding = embedding_model.encode(complaint)
+            # Calculate cosine similarities
+            similarities = util.cos_sim(complaint_embedding, category_embeddings)
+            # Get the index of the highest similarity
+            best_category_idx = similarities.argmax()
+            best_category = complaint_categories[best_category_idx]
+            category_counts[best_category] += 1
 
         # Display the results
-        st.write("Complaint Counts per Category:")
+        st.subheader("Complaint Counts per Category:")
         for category in complaint_categories:
             st.write(f"{category}: {category_counts.get(category, 0)}")
 
         # Convert dictionary to DataFrame
         df = pd.DataFrame(list(category_counts.items()), columns=['Category', 'Count'])
 
-        # Create a Streamlit app
-        st.write("Complaints Category Bar Chart")
-
         # Display the bar chart
+        st.subheader("Complaints Category Bar Chart")
         st.bar_chart(df.set_index('Category'))
-

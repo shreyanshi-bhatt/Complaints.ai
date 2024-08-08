@@ -21,7 +21,7 @@ complaint_categories = [
 # Create a prompt for classification
 def create_prompt(text):
     categories = ', '.join(complaint_categories)
-    prompt = f"Classify the following complaint into one of these categories: {categories}\n\nComplaint Text: {text}\n\nCategory:"
+    prompt = f"You are an expert in classifying complaints. Classify the following complaint into one of these categories: Product Quality Issues,Shipping and Delivery Problems,Customer Service Complaints,Payment and Billing Issues,Technical Issues,Product Availability,Marketing and Promotions,Privacy and Security Concerns,Return and Refund Process,Subscription Services .\n\nComplaint Text: {text}\n\nPlease provide only the category name as your response:"
     return prompt
 
 
