@@ -4,6 +4,11 @@ import streamlit as st
 from groq import Groq
 from collections import defaultdict
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Define complaint categories
 complaint_categories = [
@@ -21,7 +26,10 @@ complaint_categories = [
 
 # Initialize Groq API client
 def load_groq_client():
-    return Groq(api_key='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')  # Replace with your actual API key
+    api_key = os.environ.get('GROQ_API_KEY')
+    if not api_key:
+        raise ValueError("GROQ_API_KEY environment variable not set.")
+    return Groq(api_key=api_key)
 
 # Create a prompt for classification
 def create_prompt(text):
