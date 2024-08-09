@@ -1,3 +1,5 @@
+# Version 2
+
 import streamlit as st
 from langchain_community.llms import CTransformers
 from collections import defaultdict
