@@ -13,7 +13,7 @@ Namely, streamlit, groq, etc. (Check the app.py file)
 _______________________________________________________________
 ## Sample Output
 
-![image](https://github.com/user-attachments/assets/2f2c6291-4d2d-4cec-b2fc-cd37089b892c)
+![Screenshot (584)](https://github.com/user-attachments/assets/1450eb9a-8de4-484e-a346-44bf5d6c205c)
 
-![image](https://github.com/user-attachments/assets/633ddf32-9a07-4db6-a267-ff5a7913d21d)
+![Screenshot (583)](https://github.com/user-attachments/assets/a631ef35-4238-4b2c-86b1-c452a96df10a)
 
