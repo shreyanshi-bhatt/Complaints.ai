@@ -54,15 +54,18 @@ def classify_complaint(text, client):
 
 # Streamlit app
 st.set_page_config(page_title="Complaints.ai")
-st.title("Welcome to Complaints.ai")
-st.write("In today's fast-paced world, sifting through countless customer complaints to identify key issues can be overwhelming. Complaints.ai tackles this challenge head-on with a cutting-edge LLM model that effortlessly processes and analyzes all your customer feedback. Our solution categorizes complaints into the 10 most common categories, including Product Quality Issues, Shipping and Delivery Problems, Customer Service Complaints, Payment and Billing Issues, Technical Issues, Product Availability, Marketing and Promotions, Privacy and Security Concerns, Return and Refund Process, and Subscription Services. To make the data even more actionable, Complaints.ai automatically generates a clear and concise bar graph, providing you with a powerful visual tool for better decision-making.")
+st.title("Welcome to Complaints.ai 💬")
+st.write("+ In today's fast-paced world, sifting through countless customer complaints to identify key issues can be overwhelming.")
+st.write("+ Complaints.ai tackles this challenge head-on with a cutting-edge LLM model that effortlessly processes and analyzes all your customer feedback.")
+st.write("+ Our solution categorizes complaints into the 10 most common categories, including Product Quality Issues, Shipping and Delivery Problems, Customer Service Complaints, Payment and Billing Issues, Technical Issues, Product Availability, Marketing and Promotions, Privacy and Security Concerns, Return and Refund Process, and Subscription Services. ")
+st.write("+ To make the data even more actionable, Complaints.ai automatically generates a clear and concise bar graph, providing you with a powerful visual tool for better decision-making.")
 
 # Load the Groq client once and store it in session state
 if 'groq_client' not in st.session_state:
     st.session_state.groq_client = load_groq_client()
 
 groq_client = st.session_state.groq_client
-st.subheader("File Upload")
+st.subheader("File Upload 📁")
 
 uploaded_file = st.file_uploader("Upload a txt file containing a list of your customer complaints", type="txt")
 
@@ -89,3 +92,6 @@ if st.button("Analyze"):
         # Display the bar chart
         st.subheader("Complaints Category Bar Chart")
         st.bar_chart(df.set_index('Category'))
+
+st.subheader("Made with 🤍 by Shreyanshi Bhatt")
+
